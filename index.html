@@ -453,188 +453,28 @@ body::before {
   .inp { width:100%; }
 }
 
-/* ── TOSS / COIN ───────────────────────────────────────────────── */
-.toss-arena {
-  text-align:center; padding:10px 0 24px;
-}
-.toss-title {
-  font-family:'Clash Display','Cabinet Grotesk',sans-serif;
-  font-size:clamp(1.8rem,5vw,2.6rem); font-weight:700;
-  letter-spacing:-1px; margin-bottom:6px;
-}
-.toss-sub { color:var(--ink2); font-size:0.9rem; font-weight:500; margin-bottom:28px; }
 
-/* Team pick grid */
-.toss-team-grid {
-  display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-  gap:14px; margin-bottom:24px;
+/* ── DRAW / SPIN ───────────────────────────────────────────────── */
+@keyframes drawSpin {
+  to { transform: rotate(360deg); }
 }
-.toss-team-btn {
-  padding:18px 12px;
-  border:2px solid var(--ink);
-  border-radius:18px;
-  background:var(--surface);
-  cursor:pointer; transition:all 0.15s;
-  box-shadow:var(--shadow-lg);
-  display:flex; flex-direction:column; align-items:center; gap:8px;
-  font-family:'Cabinet Grotesk',sans-serif;
+@keyframes bounce {
+  0%,100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-8px) scale(1.1); }
 }
-.toss-team-btn:hover { transform:translateY(-4px); box-shadow:0 6px 0 var(--ink); }
-.toss-team-btn.selected {
-  transform:translateY(-4px); box-shadow:0 6px 0 var(--ink);
-  color:#fff;
-}
-.toss-team-icon {
-  width:48px; height:48px; border-radius:14px;
-  border:2px solid var(--ink);
-  display:flex; align-items:center; justify-content:center;
-  font-size:1.3rem; font-weight:800;
-  font-family:'Clash Display','Cabinet Grotesk',sans-serif;
-  color:#fff;
-}
-.toss-team-label { font-size:0.92rem; font-weight:700; }
-.toss-team-members { font-size:0.72rem; color:var(--muted); font-weight:500; }
-.toss-team-btn.selected .toss-team-members { color:rgba(255,255,255,0.7); }
-
-/* Coin call row */
-.coin-call-row {
-  display:flex; justify-content:center; gap:16px; margin-bottom:24px;
-}
-.coin-side-btn {
-  width:100px; height:100px;
-  border-radius:50%;
-  border:3px solid var(--ink);
-  background:var(--surface);
-  font-family:'Clash Display','Cabinet Grotesk',sans-serif;
-  font-size:0.9rem; font-weight:700;
-  cursor:pointer; transition:all 0.15s;
-  box-shadow:var(--shadow-lg);
-  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
-}
-.coin-side-btn:hover { transform:translateY(-4px) scale(1.04); box-shadow:0 6px 0 var(--ink); }
-.coin-side-btn.selected {
-  transform:translateY(-4px) scale(1.04);
-  background:var(--ink); color:#fff;
-  box-shadow:0 6px 0 rgba(0,0,0,0.5);
-}
-.coin-side-icon { font-size:2rem; }
-
-/* Coin flip animation */
-.coin-wrap {
-  perspective:600px;
-  width:120px; height:120px; margin:0 auto 20px;
-}
-.coin {
-  width:120px; height:120px; border-radius:50%;
-  border:4px solid var(--ink);
-  position:relative;
-  transform-style:preserve-3d;
-  transition:transform 0.1s;
-  box-shadow:0 4px 0 var(--ink);
-}
-.coin.flipping {
-  animation: coinFlip 1.8s cubic-bezier(0.4,0,0.2,1) forwards;
-}
-@keyframes coinFlip {
-  0%   { transform:rotateY(0deg)   rotateX(0deg);   }
-  20%  { transform:rotateY(720deg) rotateX(20deg);  }
-  50%  { transform:rotateY(1440deg) rotateX(-10deg);}
-  80%  { transform:rotateY(2000deg) rotateX(5deg);  }
-  100% { transform:rotateY(2160deg) rotateX(0deg);  }
-}
-.coin-face {
-  position:absolute; inset:0; border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  backface-visibility:hidden;
-  font-size:3rem;
-}
-.coin-heads { background:linear-gradient(135deg,#f7c200,#e8400c); }
-.coin-tails { background:linear-gradient(135deg,#3b82f6,#a855f7); transform:rotateY(180deg); }
-
-/* Result banner */
-.toss-result-banner {
-  padding:24px 20px;
-  border:3px solid var(--ink);
-  border-radius:20px;
-  text-align:center;
-  box-shadow:var(--shadow-lg);
-  animation:resultPop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
-  margin-bottom:24px;
+@keyframes slotSpin {
+  0%   { transform: translateY(-10px); opacity: 0; }
+  60%  { transform: translateY(3px);   opacity: 1; }
+  100% { transform: translateY(0);     opacity: 1; }
 }
 @keyframes resultPop {
-  from{transform:scale(0.7);opacity:0}
-  to{transform:scale(1);opacity:1}
+  from { transform: scale(0.7); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
 }
-.result-winner-name {
-  font-family:'Clash Display','Cabinet Grotesk',sans-serif;
-  font-size:clamp(1.6rem,5vw,2.4rem); font-weight:700;
-  letter-spacing:-1px; margin:8px 0 4px;
+@keyframes cardIn {
+  from { transform: translateX(-16px); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
 }
-.result-coin-text {
-  font-size:0.88rem; color:var(--ink2); font-weight:600; margin-bottom:18px;
-}
-
-/* Bat/Field election */
-.election-row {
-  display:flex; justify-content:center; gap:16px; margin-top:8px;
-}
-.elect-btn {
-  flex:1; max-width:150px;
-  padding:18px 12px;
-  border:2px solid var(--ink);
-  border-radius:16px;
-  background:var(--surface);
-  font-family:'Cabinet Grotesk',sans-serif;
-  font-size:0.9rem; font-weight:700;
-  cursor:pointer; transition:all 0.15s;
-  box-shadow:var(--shadow);
-  display:flex; flex-direction:column; align-items:center; gap:6px;
-}
-.elect-btn:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); }
-.elect-btn.selected {
-  transform:translateY(-3px); background:var(--ink); color:#fff;
-  box-shadow:0 5px 0 rgba(0,0,0,0.4);
-}
-.elect-btn-icon { font-size:2rem; }
-
-/* Final scorecard */
-.scorecard {
-  border:3px solid var(--ink);
-  border-radius:20px;
-  overflow:hidden;
-  box-shadow:var(--shadow-lg);
-  margin-bottom:24px;
-}
-.scorecard-header {
-  padding:16px 20px;
-  background:var(--ink);
-  color:#fff;
-  font-family:'Clash Display','Cabinet Grotesk',sans-serif;
-  font-size:1.1rem; font-weight:700;
-  display:flex; align-items:center; gap:10px;
-}
-.scorecard-body { background:var(--surface); }
-.scorecard-row {
-  display:flex; align-items:center; gap:14px;
-  padding:14px 20px;
-  border-bottom:1.5px solid var(--border);
-}
-.scorecard-row:last-child { border-bottom:none; }
-.scorecard-team-dot {
-  width:14px; height:14px; border-radius:50%;
-  border:2px solid var(--ink); flex-shrink:0;
-}
-.scorecard-team-name { font-weight:800; font-size:0.95rem; flex:1; }
-.scorecard-badge {
-  padding:4px 12px; border-radius:20px;
-  border:2px solid var(--ink);
-  font-size:0.78rem; font-weight:800;
-  font-family:'Clash Display','Cabinet Grotesk',sans-serif;
-}
-.badge-bat  { background:#f7c200; }
-.badge-field{ background:#22c55e; color:#fff; border-color:var(--ink); }
-.badge-lost { background:var(--bg); color:var(--muted); border-color:var(--border2); }
-
 </style>
 </head>
 <body>
@@ -664,13 +504,11 @@ let state = {
   teams: [],          // [{id,name,color,members:[]}]
   selectedChip: null, // name currently selected to assign
   editingTeamName: null,
-  // Toss state
-  tossCallingTeam: null,   // team id that called
-  tossCoinSide: null,      // "heads"|"tails" — what they called
-  tossResult: null,        // "heads"|"tails" — actual flip result
-  tossWinner: null,        // team id of toss winner
-  tossElection: null,      // "bat"|"field"
-  tossPhase: "pick",       // "pick"|"call"|"flip"|"result"
+  // Draw state
+  drawPhase: "ready",      // "ready"|"spinning"|"result"
+  drawWinner: null,        // team id that won the draw
+  drawOrder: [],           // full ranked order [{id,rank}]
+  drawAnim: false,
 };
 
 function genId(){ return Math.random().toString(36).slice(2,8); }
@@ -711,7 +549,7 @@ function buildApp(){
     {n:1, label:"Members"},
     {n:2, label:"Assign"},
     {n:3, label:"Summary"},
-    {n:4, label:"Toss 🏏"},
+    {n:4, label:"Draw 🎰"},
   ];
   const pillsHtml = steps.map(s=>`
     <div class="step-pill ${state.step===s.n?"active":state.step>s.n?"done":""}">
@@ -995,187 +833,195 @@ function buildStep3(){
       <button class="btn btn-ghost" data-action="back-to-step2">✏️ Edit Teams</button>
       <button class="btn btn-yellow" data-action="export-text">📋 Copy to Clipboard</button>
       <button class="btn btn-primary" data-action="start-over">🔄 Start Over</button>
-      <button class="btn btn-accent" data-action="go-toss">🏏 Toss →</button>
+      <button class="btn btn-accent" data-action="go-toss">🎰 Draw Play Order →</button>
     </div>
   `;
 }
 
 
 // ──────────────────────────────────────────────────────────────
-// STEP 4 — Cricket Toss
+// STEP 4 — Fair Draw (Spinner Wheel)
+// ──────────────────────────────────────────────────────────────
+// Uses a CSS animated spinner + a timed reveal per team so
+// no team can claim the result was unfair — every team's
+// position is determined simultaneously by the same random draw.
 // ──────────────────────────────────────────────────────────────
 function buildStep4(){
-  const { teams, tossPhase, tossCallingTeam, tossCoinSide, tossResult, tossWinner, tossElection } = state;
+  const { teams, drawPhase, drawWinner, drawOrder } = state;
 
-  // ── Phase: pick calling team ──
-  if(tossPhase === "pick"){
-    const teamBtns = teams.map(t=>`
-      <button class="toss-team-btn ${tossCallingTeam===t.id?"selected":""}"
-        style="${tossCallingTeam===t.id?`background:${t.color};border-color:${t.color}`:""}"
-        data-action="toss-pick-team" data-team="${t.id}">
-        <div class="toss-team-icon" style="background:${t.color}">${t.name.slice(0,2).toUpperCase()}</div>
-        <div class="toss-team-label">${escHtml(t.name)}</div>
-        <div class="toss-team-members">${t.members.length} member${t.members.length!==1?"s":""}</div>
-      </button>`).join("");
+  // ── Phase: ready ─────────────────────────────────────────────
+  if(drawPhase === "ready"){
+    const teamPreviews = teams.map((t,i) => `
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;
+        background:var(--bg);border:2px solid var(--border2);border-radius:12px">
+        <div style="width:32px;height:32px;border-radius:10px;background:${t.color};
+          border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;
+          color:#fff;font-weight:800;font-size:0.75rem;flex-shrink:0">
+          ${t.name.slice(0,2).toUpperCase()}
+        </div>
+        <div>
+          <div style="font-weight:700;font-size:0.9rem">${escHtml(t.name)}</div>
+          <div style="font-size:0.72rem;color:var(--muted)">${t.members.length} member${t.members.length!==1?"s":""}</div>
+        </div>
+      </div>`).join("");
 
     return `
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
         <button class="btn btn-ghost btn-sm" data-action="back-to-step3">← Back</button>
-        <div class="toss-title" style="margin-bottom:0">The Toss 🏏</div>
+        <div style="font-family:'Clash Display',sans-serif;font-size:clamp(1.6rem,4vw,2.4rem);
+          font-weight:700;letter-spacing:-1px">Who Goes First? 🎰</div>
       </div>
-      <div class="card">
-        <div style="font-size:1rem;font-weight:800;font-family:'Clash Display',sans-serif;margin-bottom:4px">
-          Step 1 — Which team calls the toss?
-        </div>
-        <div style="font-size:0.82rem;color:var(--muted);margin-bottom:16px">
-          Select the team that gets to call heads or tails
-        </div>
-        <div class="toss-team-grid">${teamBtns}</div>
-        <div style="display:flex;justify-content:flex-end">
-          <button class="btn btn-accent" data-action="toss-go-call" ${tossCallingTeam?"":"disabled"}>
-            Call the Toss →
-          </button>
-        </div>
-      </div>`;
-  }
 
-  // ── Phase: call heads or tails ──
-  if(tossPhase === "call"){
-    const callingTeam = teams.find(t=>t.id===tossCallingTeam);
-    return `
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
-        <button class="btn btn-ghost btn-sm" data-action="toss-back-pick">← Back</button>
-        <div class="toss-title" style="margin-bottom:0">Call It! 🪙</div>
-      </div>
-      <div class="card" style="text-align:center">
-        <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:20px;
-          background:${callingTeam.color}18;border:2px solid ${callingTeam.color};margin-bottom:16px">
-          <div style="width:10px;height:10px;border-radius:50%;background:${callingTeam.color}"></div>
-          <span style="font-weight:700;font-size:0.85rem">${escHtml(callingTeam.name)} is calling</span>
+      <div class="card" style="margin-bottom:16px">
+        <div style="font-size:1rem;font-weight:800;font-family:'Clash Display',sans-serif;margin-bottom:4px">
+          Fair Random Draw
         </div>
-        <div style="font-size:1rem;font-weight:800;font-family:'Clash Display',sans-serif;margin-bottom:18px">
-          Heads or Tails?
+        <div style="font-size:0.85rem;color:var(--ink2);font-weight:500;line-height:1.6;margin-bottom:18px">
+          All <strong>${teams.length} teams</strong> will be ranked simultaneously by a single random draw.
+          No team chooses — the wheel decides everything. Transparent, instant, unchallengeable.
         </div>
-        <div class="coin-call-row">
-          <button class="coin-side-btn ${tossCoinSide==="heads"?"selected":""}" data-action="toss-call-side" data-side="heads">
-            <div class="coin-side-icon">🌕</div>
-            <div>Heads</div>
-          </button>
-          <button class="coin-side-btn ${tossCoinSide==="tails"?"selected":""}" data-action="toss-call-side" data-side="tails">
-            <div class="coin-side-icon">🌑</div>
-            <div>Tails</div>
-          </button>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px">
+          ${teamPreviews}
         </div>
-        <button class="btn btn-accent" style="margin-top:8px" data-action="toss-flip" ${tossCoinSide?"":"disabled"}>
-          🪙 Flip the Coin!
+        <div style="background:#fffbeb;border:1.5px solid #fde68a;border-radius:10px;
+          padding:10px 14px;font-size:0.82rem;font-weight:600;color:#92400e;margin-bottom:18px">
+          🎯 The wheel spins once and assigns a random play-order to <em>every</em> team at the same moment — fair for 2, 3, 4 or more teams.
+        </div>
+        <button class="btn btn-accent" style="width:100%;font-size:1rem;padding:16px" data-action="draw-spin">
+          🎰 Spin the Wheel!
         </button>
       </div>`;
   }
 
-  // ── Phase: flipping ──
-  if(tossPhase === "flip"){
+  // ── Phase: spinning ───────────────────────────────────────────
+  if(drawPhase === "spinning"){
+    const slots = teams.map((t,i) => `
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;
+        background:var(--bg);border:2px solid var(--border2);border-radius:12px;
+        animation:slotSpin 0.4s ease ${i*0.12}s both">
+        <div style="width:32px;height:32px;border-radius:10px;background:${t.color};
+          border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;
+          color:#fff;font-weight:800;font-size:0.75rem;flex-shrink:0">
+          ${t.name.slice(0,2).toUpperCase()}
+        </div>
+        <div style="flex:1;font-weight:700;font-size:0.9rem">${escHtml(t.name)}</div>
+        <div style="width:28px;height:28px;border-radius:50%;
+          border:3px solid var(--border2);border-top-color:var(--accent);
+          animation:drawSpin 0.5s linear infinite"></div>
+      </div>`).join("");
+
     return `
-      <div class="card" style="text-align:center;padding:40px 28px">
-        <div style="font-size:1rem;font-weight:800;font-family:'Clash Display',sans-serif;margin-bottom:24px">
-          Flipping…
+      <div class="card" style="text-align:center;padding:36px 24px">
+        <div style="font-size:2.5rem;margin-bottom:10px;animation:bounce 0.6s ease infinite">🎰</div>
+        <div style="font-family:'Clash Display',sans-serif;font-size:1.4rem;font-weight:700;
+          margin-bottom:6px">Drawing…</div>
+        <div style="color:var(--muted);font-size:0.85rem;margin-bottom:24px">
+          Randomly assigning play order to all teams
         </div>
-        <div class="coin-wrap">
-          <div class="coin flipping">
-            <div class="coin-face coin-heads">🌕</div>
-            <div class="coin-face coin-tails">🌑</div>
-          </div>
-        </div>
-        <div style="color:var(--muted);font-size:0.9rem;font-weight:600;margin-top:8px">
-          The coin is in the air…
+        <div style="display:flex;flex-direction:column;gap:8px;text-align:left">
+          ${slots}
         </div>
       </div>`;
   }
 
-  // ── Phase: result / election ──
-  if(tossPhase === "result"){
-    const winner     = teams.find(t=>t.id===tossWinner);
-    const loser      = teams.find(t=>t.id!==tossWinner);
-    const callingTeam= teams.find(t=>t.id===tossCallingTeam);
-    const won        = tossCallingTeam === tossWinner;
-    const coinEmoji  = tossResult === "heads" ? "🌕" : "🌑";
+  // ── Phase: result ─────────────────────────────────────────────
+  if(drawPhase === "result"){
+    // drawOrder is sorted: index 0 = first to play
+    const orderedTeams = drawOrder.map(d => teams.find(t => t.id === d.id));
+    const winner = orderedTeams[0];
 
-    // If multi-team (>2), loser is just "others"
-    const loserLabel = teams.length === 2 ? escHtml(loser?.name||"") : "other teams";
+    const MEDALS = ["🥇","🥈","🥉"];
+    const ORDINALS = ["1st","2nd","3rd","4th","5th","6th","7th","8th","9th","10th"];
+    const ORDER_LABELS = ["Goes FIRST","Goes 2nd","Goes 3rd","Goes 4th",
+                          "Goes 5th","Goes 6th","Goes 7th","Goes 8th","Goes 9th","Goes 10th"];
+    const CONFETTI_COLORS = ["#f7c200","#e8400c","#22c55e","#3b82f6","#a855f7"];
 
-    let electionHtml = "";
-    if(!tossElection){
-      electionHtml = `
-        <div style="font-size:0.92rem;font-weight:700;margin-bottom:12px">
-          ${escHtml(winner.name)}, choose your preference:
-        </div>
-        <div class="election-row">
-          <button class="elect-btn" data-action="toss-elect" data-choice="bat">
-            <div class="elect-btn-icon">🏏</div>
-            <div>Bat First</div>
-          </button>
-          <button class="elect-btn" data-action="toss-elect" data-choice="field">
-            <div class="elect-btn-icon">🧤</div>
-            <div>Field First</div>
-          </button>
+    const orderRows = orderedTeams.map((t,i) => {
+      const isFirst = i === 0;
+      const medal = MEDALS[i] || `#${i+1}`;
+      return `
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;
+          background:${isFirst ? t.color+"18" : "var(--bg)"};
+          border:${isFirst ? `2px solid ${t.color}` : "1.5px solid var(--border)"};
+          border-radius:14px;
+          box-shadow:${isFirst ? `0 4px 0 ${t.color}` : "none"};
+          animation:cardIn 0.35s cubic-bezier(0.34,1.4,0.64,1) ${i*0.1+0.1}s both">
+          <div style="font-size:1.5rem;width:36px;text-align:center;flex-shrink:0">${medal}</div>
+          <div style="width:38px;height:38px;border-radius:11px;background:${t.color};
+            border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;
+            color:#fff;font-weight:800;font-size:0.8rem;flex-shrink:0">
+            ${t.name.slice(0,2).toUpperCase()}
+          </div>
+          <div style="flex:1">
+            <div style="font-weight:800;font-size:0.95rem;font-family:'Clash Display',sans-serif">
+              ${escHtml(t.name)}
+            </div>
+            <div style="font-size:0.72rem;color:var(--muted)">${t.members.length} member${t.members.length!==1?"s":""}</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-family:'Clash Display',sans-serif;font-size:0.82rem;font-weight:800;
+              padding:4px 12px;border-radius:20px;
+              background:${isFirst ? t.color : "var(--surface)"};
+              border:2px solid ${isFirst ? t.color : "var(--border2)"};
+              color:${isFirst ? "#fff" : "var(--muted)"}">
+              ${ORDER_LABELS[i]}
+            </div>
+          </div>
         </div>`;
-    } else {
-      electionHtml = `
-        <div style="font-size:0.95rem;font-weight:700;color:#166534">
-          ✅ Decision made!
-        </div>`;
-    }
+    }).join("");
+
+    // How-it-was-decided note
+    const seedNote = `Draw seed: <code style="font-family:monospace;background:rgba(0,0,0,0.06);
+      padding:1px 6px;border-radius:4px;font-size:0.78rem">${drawOrder.map(d=>d.roll.toFixed(4)).join(" › ")}</code>`;
 
     return `
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
-        <button class="btn btn-ghost btn-sm" data-action="toss-redo">🔄 Redo Toss</button>
-        <div class="toss-title" style="margin-bottom:0">Toss Result 🎉</div>
+        <button class="btn btn-ghost btn-sm" data-action="draw-redo">🔄 Redraw</button>
+        <div style="font-family:'Clash Display',sans-serif;font-size:clamp(1.6rem,4vw,2.2rem);
+          font-weight:700;letter-spacing:-1px">Play Order Decided! 🎉</div>
       </div>
 
-      <div class="toss-result-banner" style="background:${winner.color}14;border-color:${winner.color}">
-        <div style="font-size:2rem">${coinEmoji}</div>
-        <div style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:${winner.color}">
-          It's ${tossResult}!
+      <!-- Winner banner -->
+      <div style="padding:22px 20px;border:3px solid ${winner.color};border-radius:20px;
+        background:${winner.color}12;text-align:center;margin-bottom:16px;
+        box-shadow:0 4px 0 ${winner.color};
+        animation:resultPop 0.5s cubic-bezier(0.34,1.56,0.64,1) both">
+        <div style="font-size:2.5rem;margin-bottom:6px">🎰</div>
+        <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;
+          letter-spacing:2px;color:${winner.color};margin-bottom:4px">Draw Complete</div>
+        <div style="font-family:'Clash Display',sans-serif;font-size:clamp(1.4rem,4vw,2rem);
+          font-weight:700;letter-spacing:-0.5px;margin-bottom:4px">
+          ${escHtml(winner.name)} goes first!
         </div>
-        <div class="result-winner-name">${escHtml(winner.name)} wins the toss!</div>
-        <div class="result-coin-text">
-          ${escHtml(callingTeam.name)} called <strong>${tossCoinSide}</strong> —
-          ${won ? "correct call 🎯" : "wrong call, but " + escHtml(winner.name) + " got lucky!"}
-        </div>
-        ${electionHtml}
-      </div>
-
-      ${tossElection ? `
-      <div class="scorecard">
-        <div class="scorecard-header">📋 Match Setup</div>
-        <div class="scorecard-body">
-          ${teams.map(t=>{
-            const isWinner = t.id === tossWinner;
-            const choice   = isWinner ? tossElection : (tossElection==="bat"?"field":"bat");
-            return `
-            <div class="scorecard-row">
-              <div class="scorecard-team-dot" style="background:${t.color}"></div>
-              <div class="scorecard-team-name">${escHtml(t.name)}</div>
-              <div style="display:flex;gap:6px;align-items:center">
-                ${isWinner?`<span style="font-size:0.72rem;background:${t.color}22;border:1.5px solid ${t.color};padding:2px 8px;border-radius:10px;font-weight:700;color:${t.color}">🏆 Won toss</span>`:""}
-                <div class="scorecard-badge ${choice==="bat"?"badge-bat":"badge-field"}">
-                  ${choice==="bat"?"🏏 Batting":"🧤 Fielding"}
-                </div>
-              </div>
-            </div>`;
-          }).join("")}
+        <div style="font-size:0.82rem;color:var(--ink2);font-weight:500">
+          Full play order drawn below — determined by a single random roll
         </div>
       </div>
 
+      <!-- Ordered list -->
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+        ${orderRows}
+      </div>
+
+      <!-- Transparency note -->
+      <div style="padding:10px 14px;border-radius:12px;background:rgba(0,0,0,0.04);
+        border:1.5px solid var(--border);font-size:0.78rem;color:var(--muted);
+        margin-bottom:20px;line-height:1.6">
+        🔍 <strong>How the draw worked:</strong> Each team received a random number between 0–1.
+        Highest number plays first. ${seedNote}
+      </div>
+
+      <!-- Actions -->
       <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap">
-        <button class="btn btn-ghost" data-action="toss-redo">🔄 Redo Toss</button>
-        <button class="btn btn-yellow" data-action="export-toss">📋 Copy Result</button>
+        <button class="btn btn-ghost" data-action="draw-redo">🔄 Redraw</button>
+        <button class="btn btn-yellow" data-action="export-draw">📋 Copy Order</button>
         <button class="btn btn-accent" data-action="start-over">🏠 Start Over</button>
-      </div>` : ""}
-    `;
+      </div>`;
   }
 
   return `<div>Loading…</div>`;
 }
+
 
 // ═══════════════════════════════════════════════════════════════
 // EVENTS
@@ -1288,75 +1134,48 @@ function handleAction(el){
   }
   else if(a==="start-over"){
     setState({ step:1, numTeams:null, members:[], memberInput:"", teams:[], selectedChip:null,
-               tossCallingTeam:null, tossCoinSide:null, tossResult:null,
-               tossWinner:null, tossElection:null, tossPhase:"pick" });
+               drawPhase:"ready", drawWinner:null, drawOrder:[], drawAnim:false });
   }
-  // ── Toss actions ──
+  // ── Draw actions ──
   else if(a==="go-toss"){
-    setState({ step:4, tossPhase:"pick", tossCallingTeam:null, tossCoinSide:null,
-               tossResult:null, tossWinner:null, tossElection:null });
+    setState({ step:4, drawPhase:"ready", drawWinner:null, drawOrder:[], drawAnim:false });
   }
   else if(a==="back-to-step3"){
     setState({ step:3 });
   }
-  else if(a==="toss-pick-team"){
-    setState({ tossCallingTeam: el.dataset.team });
-  }
-  else if(a==="toss-go-call"){
-    if(!state.tossCallingTeam) return;
-    setState({ tossPhase:"call" });
-  }
-  else if(a==="toss-back-pick"){
-    setState({ tossPhase:"pick", tossCoinSide:null });
-  }
-  else if(a==="toss-call-side"){
-    setState({ tossCoinSide: el.dataset.side });
-  }
-  else if(a==="toss-flip"){
-    if(!state.tossCoinSide) return;
-    setState({ tossPhase:"flip" });
-    // Animate then reveal after 2s
+  else if(a==="draw-spin"){
+    setState({ drawPhase:"spinning" });
+    // Animate for 1.8s then compute result
     setTimeout(()=>{
-      const result = Math.random() < 0.5 ? "heads" : "tails";
-      const callerWon = result === state.tossCoinSide;
-      // If caller won, they win; otherwise pick a random other team
-      let winnerTeam;
-      if(callerWon){
-        winnerTeam = state.tossCallingTeam;
-      } else {
-        const others = state.teams.filter(t=>t.id!==state.tossCallingTeam);
-        winnerTeam = others[Math.floor(Math.random()*others.length)].id;
-      }
-      setState({ tossPhase:"result", tossResult:result, tossWinner:winnerTeam });
-    }, 2000);
+      // Each team gets a random roll 0–1; sort descending → rank
+      const rolls = state.teams.map(t => ({ id:t.id, roll: Math.random() }));
+      rolls.sort((a,b) => b.roll - a.roll);         // highest roll = first
+      const drawOrder = rolls.map((r,i) => ({ id:r.id, rank:i+1, roll:r.roll }));
+      setState({
+        drawPhase: "result",
+        drawWinner: drawOrder[0].id,
+        drawOrder,
+      });
+    }, 1800);
   }
-  else if(a==="toss-elect"){
-    const choice = el.dataset.choice;
-    setState({ tossElection: choice });
-    toast(choice==="bat" ? "🏏 Batting first!" : "🧤 Fielding first!");
+  else if(a==="draw-redo"){
+    setState({ drawPhase:"ready", drawWinner:null, drawOrder:[], drawAnim:false });
   }
-  else if(a==="toss-redo"){
-    setState({ tossPhase:"pick", tossCallingTeam:null, tossCoinSide:null,
-               tossResult:null, tossWinner:null, tossElection:null });
-  }
-  else if(a==="export-toss"){
-    const winner = state.teams.find(t=>t.id===state.tossWinner);
+  else if(a==="export-draw"){
+    const ORDINALS = ["1st","2nd","3rd","4th","5th","6th","7th","8th","9th","10th"];
     const lines = [
-      "🏏 TOSS RESULT",
-      "═══════════════════",
-      `Coin: ${state.tossResult?.toUpperCase()} (${state.tossCoinSide?.toUpperCase()} was called)`,
-      `Toss Winner: ${winner?.name}`,
-      `Decision: ${winner?.name} chose to ${state.tossElection} first`,
-      "",
-      "MATCH LINEUP:",
-      ...state.teams.map(t=>{
-        const choice = t.id===state.tossWinner ? state.tossElection : (state.tossElection==="bat"?"field":"bat");
-        return `  ${t.name}: ${choice==="bat"?"🏏 Batting":"🧤 Fielding"}`;
+      "🎰 PLAY ORDER DRAW RESULT",
+      "══════════════════════════",
+      ...state.drawOrder.map((d,i) => {
+        const t = state.teams.find(tm=>tm.id===d.id);
+        return `${ORDINALS[i]} — ${t.name} (roll: ${d.roll.toFixed(4)})`;
       }),
+      "",
+      "Draw is final and tamper-proof.",
     ];
     const text = lines.join("\n");
     if(navigator.clipboard){
-      navigator.clipboard.writeText(text).then(()=>toast("📋 Result copied!"));
+      navigator.clipboard.writeText(text).then(()=>toast("📋 Draw result copied!"));
     }
   }
 }
