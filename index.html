@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>TeamForge — Build Your Teams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@500;600;700&family=Cabinet+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet"/>
+<!-- Fallback if Clash Display not available via Google -->
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=cabinet-grotesk@400,500,700,800&display=swap" rel="stylesheet"/>
+<style>
+/* ── Reset & Root ─────────────────────────────────────────────── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg:       #f5f0e8;
+  --surface:  #ffffff;
+  --ink:      #1a1208;
+  --ink2:     #4a3f2f;
+  --muted:    #9e8e76;
+  --border:   #e0d6c4;
+  --border2:  #ccc0a8;
+  --accent:   #e8400c;
+  --accent2:  #f7c200;
+  --r:        16px;
+  --shadow:   0 2px 0 #1a1208;
+  --shadow-lg:0 4px 0 #1a1208;
+}
+
+html, body { min-height:100vh; background:var(--bg); }
+
+body {
+  font-family: 'Cabinet Grotesk', 'Trebuchet MS', sans-serif;
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* ── Dot-grid background ─────────────────────────────────────── */
+body::before {
+  content:'';
+  position:fixed; inset:0; z-index:0;
+  background-image: radial-gradient(circle, #c8b89a 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity:0.45;
+  pointer-events:none;
+}
+
+/* ── Layout ──────────────────────────────────────────────────── */
+#app {
+  position:relative; z-index:1;
+  max-width:860px; margin:0 auto;
+  padding:32px 20px 80px;
+}
+
+/* ── Typography ──────────────────────────────────────────────── */
+.display {
+  font-family: 'Clash Display', 'Cabinet Grotesk', sans-serif;
+  font-weight:700;
+  letter-spacing:-1.5px;
+}
+
+/* ── Header ──────────────────────────────────────────────────── */
+.site-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:40px;
+}
+.logo {
+  font-family:'Clash Display','Cabinet Grotesk',sans-serif;
+  font-weight:700; font-size:1.6rem; letter-spacing:-1px;
+  color:var(--ink);
+}
+.logo span {
+  display:inline-block;
+  background:var(--accent);
+  color:#fff;
+  padding:2px 10px 3px;
+  border-radius:6px;
+  margin-left:2px;
+}
+.step-pills {
+  display:flex; gap:8px;
+}
+.step-pill {
+  padding:6px 14px;
+  border-radius:20px;
+  border:2px solid var(--border2);
+  background:var(--surface);
+  font-size:0.78rem; font-weight:700;
+  color:var(--muted);
+  box-shadow:var(--shadow);
+  transition:all 0.2s;
+}
+.step-pill.active {
+  background:var(--ink);
+  border-color:var(--ink);
+  color:#fff;
+}
+.step-pill.done {
+  background:var(--accent2);
+  border-color:var(--ink);
+  color:var(--ink);
+}
+
+/* ── Section heading ─────────────────────────────────────────── */
+.section-title {
+  font-size:clamp(1.8rem,5vw,2.8rem);
+  font-family:'Clash Display','Cabinet Grotesk',sans-serif;
+  font-weight:700; letter-spacing:-1px;
+  line-height:1.1; margin-bottom:8px;
+}
+.section-sub {
+  color:var(--ink2); font-size:0.95rem; font-weight:500;
+  margin-bottom:28px;
+}
+
+/* ── Cards ───────────────────────────────────────────────────── */
+.card {
+  background:var(--surface);
+  border:2px solid var(--ink);
+  border-radius:20px;
+  box-shadow:var(--shadow-lg);
+  padding:28px;
+  margin-bottom:20px;
+}
+
+/* ── Input ───────────────────────────────────────────────────── */
+.input-row {
+  display:flex; gap:10px; align-items:center;
+}
+.inp {
+  flex:1;
+  padding:13px 16px;
+  border:2px solid var(--border2);
+  border-radius:12px;
+  background:var(--bg);
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:1rem; font-weight:500; color:var(--ink);
+  outline:none; transition:border-color 0.15s, box-shadow 0.15s;
+}
+.inp:focus {
+  border-color:var(--ink);
+  box-shadow:0 0 0 3px rgba(26,18,8,0.1);
+}
+.inp::placeholder { color:var(--muted); font-weight:400; }
+.inp.error { border-color:var(--accent); box-shadow:0 0 0 3px rgba(232,64,12,0.12); }
+
+/* ── Buttons ─────────────────────────────────────────────────── */
+.btn {
+  padding:12px 22px;
+  border-radius:12px;
+  border:2px solid var(--ink);
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:0.95rem; font-weight:700;
+  cursor:pointer; transition:all 0.12s;
+  display:inline-flex; align-items:center; gap:7px;
+  box-shadow:var(--shadow);
+  white-space:nowrap;
+}
+.btn:hover { transform:translateY(-2px); box-shadow:var(--shadow-lg); }
+.btn:active { transform:translateY(1px); box-shadow:none; }
+
+.btn-primary { background:var(--ink); color:#fff; }
+.btn-accent  { background:var(--accent); color:#fff; border-color:var(--ink); }
+.btn-yellow  { background:var(--accent2); color:var(--ink); border-color:var(--ink); }
+.btn-ghost   { background:var(--bg); color:var(--ink); }
+.btn-sm      { padding:8px 14px; font-size:0.82rem; border-radius:9px; }
+.btn-icon    { padding:10px 12px; }
+.btn:disabled{ opacity:0.35; cursor:not-allowed; transform:none; box-shadow:var(--shadow); }
+
+/* ── Team count selector ─────────────────────────────────────── */
+.count-grid {
+  display:flex; gap:10px; flex-wrap:wrap;
+  margin-top:14px;
+}
+.count-btn {
+  width:52px; height:52px;
+  border-radius:12px;
+  border:2px solid var(--border2);
+  background:var(--bg);
+  font-family:'Clash Display','Cabinet Grotesk',sans-serif;
+  font-size:1.2rem; font-weight:700; color:var(--muted);
+  cursor:pointer; transition:all 0.15s;
+  box-shadow:var(--shadow);
+  display:flex; align-items:center; justify-content:center;
+}
+.count-btn:hover { border-color:var(--ink); color:var(--ink); transform:translateY(-2px); box-shadow:var(--shadow-lg); }
+.count-btn.active {
+  background:var(--ink); border-color:var(--ink); color:#fff;
+  transform:translateY(-2px); box-shadow:var(--shadow-lg);
+}
+
+/* ── Members pool ────────────────────────────────────────────── */
+.members-pool {
+  display:flex; flex-wrap:wrap; gap:8px;
+  min-height:56px;
+  padding:10px;
+  border:2px dashed var(--border2);
+  border-radius:14px;
+  background:var(--bg);
+  margin-top:12px;
+  transition:border-color 0.2s;
+}
+.members-pool:empty::after {
+  content:'No members added yet…';
+  color:var(--muted); font-size:0.85rem; font-weight:500;
+  align-self:center;
+}
+.member-chip {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:6px 12px 6px 8px;
+  border-radius:20px;
+  border:2px solid var(--ink);
+  background:var(--surface);
+  font-size:0.85rem; font-weight:700;
+  box-shadow:2px 2px 0 var(--ink);
+  animation: chipIn 0.22s cubic-bezier(0.34,1.56,0.64,1) both;
+  cursor:default;
+  user-select:none;
+}
+@keyframes chipIn {
+  from { transform:scale(0.5); opacity:0; }
+  to   { transform:scale(1);   opacity:1; }
+}
+.chip-avatar {
+  width:20px; height:20px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.65rem; font-weight:800; color:#fff;
+  flex-shrink:0;
+}
+.chip-remove {
+  margin-left:2px;
+  width:16px; height:16px; border-radius:50%;
+  background:rgba(0,0,0,0.12);
+  border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.65rem; color:var(--ink);
+  transition:background 0.15s;
+  padding:0;
+}
+.chip-remove:hover { background:var(--accent); color:#fff; }
+
+/* ── Error / success msgs ────────────────────────────────────── */
+.msg {
+  display:flex; align-items:center; gap:8px;
+  padding:10px 14px;
+  border-radius:10px;
+  font-size:0.85rem; font-weight:600;
+  margin-top:10px;
+  animation:fadeSlide 0.2s ease;
+  border:1.5px solid;
+}
+@keyframes fadeSlide { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:none} }
+.msg-error   { background:#fff0ec; border-color:#f5b4a2; color:#c23000; }
+.msg-success { background:#f0fdf4; border-color:#86efac; color:#166534; }
+.msg-info    { background:#fffbeb; border-color:#fde68a; color:#92400e; }
+
+/* ── Teams grid ──────────────────────────────────────────────── */
+.teams-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(240px,1fr));
+  gap:16px;
+  margin-top:8px;
+}
+
+.team-card {
+  border:2px solid var(--ink);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:var(--shadow-lg);
+  background:var(--surface);
+  transition:transform 0.15s, box-shadow 0.15s;
+}
+.team-card:hover { transform:translateY(-3px); box-shadow:0 6px 0 var(--ink); }
+
+.team-header {
+  padding:14px 16px 12px;
+  border-bottom:2px solid var(--ink);
+  display:flex; align-items:center; gap:10px;
+}
+.team-color-dot {
+  width:14px; height:14px; border-radius:50%;
+  border:2px solid var(--ink); flex-shrink:0;
+}
+.team-name {
+  font-family:'Clash Display','Cabinet Grotesk',sans-serif;
+  font-size:1rem; font-weight:700; flex:1; letter-spacing:-0.3px;
+}
+.team-count-badge {
+  font-size:0.72rem; font-weight:800;
+  padding:3px 8px; border-radius:6px;
+  border:1.5px solid var(--ink);
+  background:var(--bg);
+  font-family:'Cabinet Grotesk',sans-serif;
+}
+
+.team-body { padding:14px 16px; min-height:60px; }
+.team-body .member-chip { margin:3px; }
+
+.team-drop-zone {
+  min-height:54px;
+  border:2px dashed var(--border2);
+  border-radius:10px;
+  padding:8px;
+  display:flex; flex-wrap:wrap; gap:6px;
+  transition:border-color 0.15s, background 0.15s;
+}
+.team-drop-zone.has-members {
+  border-style:solid; border-color:var(--border);
+}
+.team-drop-zone:empty::after {
+  content:'Drop members here';
+  color:var(--muted); font-size:0.78rem; font-weight:500;
+  align-self:center; margin:auto;
+}
+
+/* ── Assign panel ────────────────────────────────────────────── */
+.assign-section { margin-top:6px; }
+.assign-label {
+  font-size:0.7rem; font-weight:800;
+  text-transform:uppercase; letter-spacing:1.5px;
+  color:var(--muted); margin-bottom:8px;
+}
+
+/* Unassigned chip pool */
+.unassigned-pool {
+  display:flex; flex-wrap:wrap; gap:7px;
+  min-height:48px;
+  padding:10px 12px;
+  background:var(--bg);
+  border:2px solid var(--border2);
+  border-radius:12px;
+  margin-bottom:16px;
+}
+.unassigned-pool:empty::after {
+  content:'All members assigned ✓';
+  color:#22c55e; font-size:0.82rem; font-weight:700;
+  align-self:center;
+}
+
+.assignable-chip {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:5px 10px 5px 7px;
+  border-radius:20px;
+  border:2px solid var(--ink);
+  background:var(--surface);
+  font-size:0.82rem; font-weight:700;
+  box-shadow:2px 2px 0 var(--ink);
+  cursor:pointer;
+  transition:all 0.12s;
+  user-select:none;
+}
+.assignable-chip:hover {
+  background:var(--accent2);
+  transform:translateY(-2px);
+  box-shadow:2px 4px 0 var(--ink);
+}
+.assignable-chip.selected {
+  background:var(--ink); color:#fff;
+  transform:translateY(-2px); box-shadow:2px 4px 0 var(--accent);
+}
+
+/* ── Team target buttons ─────────────────────────────────────── */
+.team-targets {
+  display:flex; flex-wrap:wrap; gap:8px;
+  margin-top:8px;
+}
+.team-target-btn {
+  display:flex; align-items:center; gap:7px;
+  padding:9px 16px;
+  border-radius:12px;
+  border:2px solid var(--ink);
+  background:var(--surface);
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:0.85rem; font-weight:700;
+  cursor:pointer; transition:all 0.12s;
+  box-shadow:var(--shadow);
+}
+.team-target-btn:hover {
+  transform:translateY(-2px); box-shadow:var(--shadow-lg);
+  background:var(--bg);
+}
+.team-target-btn .dot {
+  width:10px; height:10px; border-radius:50%; border:1.5px solid var(--ink); flex-shrink:0;
+}
+
+/* ── Summary table ───────────────────────────────────────────── */
+.summary-table { width:100%; border-collapse:collapse; }
+.summary-table th {
+  text-align:left; padding:10px 14px;
+  font-size:0.72rem; font-weight:800;
+  text-transform:uppercase; letter-spacing:1.5px;
+  background:var(--ink); color:#fff;
+  border-bottom:2px solid var(--ink);
+}
+.summary-table th:first-child { border-radius:10px 0 0 0; }
+.summary-table th:last-child  { border-radius:0 10px 0 0; }
+.summary-table td {
+  padding:10px 14px;
+  border-bottom:1px solid var(--border);
+  font-size:0.9rem; font-weight:500;
+  vertical-align:middle;
+}
+.summary-table tr:last-child td { border-bottom:none; }
+.summary-table tr:nth-child(even) td { background:rgba(0,0,0,0.025); }
+.member-chips-inline { display:flex; flex-wrap:wrap; gap:5px; }
+
+/* ── Progress bar ─────────────────────────────────────────────  */
+.progress-bar-wrap {
+  height:8px; background:var(--border);
+  border-radius:4px; overflow:hidden;
+  border:1.5px solid var(--border2); margin-top:6px;
+}
+.progress-bar-fill {
+  height:100%; border-radius:3px;
+  background:linear-gradient(90deg, var(--accent2), var(--accent));
+  transition:width 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ── Toast ───────────────────────────────────────────────────── */
+#toast {
+  position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px);
+  background:var(--ink); color:#fff;
+  padding:12px 22px; border-radius:12px;
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:0.9rem; font-weight:700;
+  box-shadow:0 4px 20px rgba(0,0,0,0.3);
+  z-index:999; transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  white-space:nowrap;
+}
+#toast.show { transform:translateX(-50%) translateY(0); }
+
+/* ── Divider ─────────────────────────────────────────────────── */
+.divider {
+  border:none; border-top:2px dashed var(--border2);
+  margin:24px 0;
+}
+
+/* ── Animations ─────────────────────────────────────────────── */
+.screen { animation: screenIn 0.3s ease both; }
+@keyframes screenIn {
+  from { opacity:0; transform:translateY(12px); }
+  to   { opacity:1; transform:none; }
+}
+
+.team-card { animation: cardIn 0.3s cubic-bezier(0.34,1.4,0.64,1) both; }
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media(max-width:560px){
+  .teams-grid { grid-template-columns:1fr; }
+  .site-header { flex-direction:column; align-items:flex-start; gap:12px; }
+  .input-row { flex-direction:column; }
+  .inp { width:100%; }
+}
+
+/* ── TOSS / COIN ───────────────────────────────────────────────── */
+.toss-arena {
+  text-align:center; padding:10px 0 24px;
+}
+.toss-title {
+  font-family:'Clash Display','Cabinet Grotesk',sans-serif;
+  font-size:clamp(1.8rem,5vw,2.6rem); font-weight:700;
+  letter-spacing:-1px; margin-bottom:6px;
+}
+.toss-sub { color:var(--ink2); font-size:0.9rem; font-weight:500; margin-bottom:28px; }
+
+/* Team pick grid */
+.toss-team-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:14px; margin-bottom:24px;
+}
+.toss-team-btn {
+  padding:18px 12px;
+  border:2px solid var(--ink);
+  border-radius:18px;
+  background:var(--surface);
+  cursor:pointer; transition:all 0.15s;
+  box-shadow:var(--shadow-lg);
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  font-family:'Cabinet Grotesk',sans-serif;
+}
+.toss-team-btn:hover { transform:translateY(-4px); box-shadow:0 6px 0 var(--ink); }
+.toss-team-btn.selected {
+  transform:translateY(-4px); box-shadow:0 6px 0 var(--ink);
+  color:#fff;
+}
+.toss-team-icon {
+  width:48px; height:48px; border-radius:14px;
+  border:2px solid var(--ink);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.3rem; font-weight:800;
+  font-family:'Clash Display','Cabinet Grotesk',sans-serif;
+  color:#fff;
+}
+.toss-team-label { font-size:0.92rem; font-weight:700; }
+.toss-team-members { font-size:0.72rem; color:var(--muted); font-weight:500; }
+.toss-team-btn.selected .toss-team-members { color:rgba(255,255,255,0.7); }
+
+/* Coin call row */
+.coin-call-row {
+  display:flex; justify-content:center; gap:16px; margin-bottom:24px;
+}
+.coin-side-btn {
+  width:100px; height:100px;
+  border-radius:50%;
+  border:3px solid var(--ink);
+  background:var(--surface);
+  font-family:'Clash Display','Cabinet Grotesk',sans-serif;
+  font-size:0.9rem; font-weight:700;
+  cursor:pointer; transition:all 0.15s;
+  box-shadow:var(--shadow-lg);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+}
+.coin-side-btn:hover { transform:translateY(-4px) scale(1.04); box-shadow:0 6px 0 var(--ink); }
+.coin-side-btn.selected {
+  transform:translateY(-4px) scale(1.04);
+  background:var(--ink); color:#fff;
+  box-shadow:0 6px 0 rgba(0,0,0,0.5);
+}
+.coin-side-icon { font-size:2rem; }
+
+/* Coin flip animation */
+.coin-wrap {
+  perspective:600px;
+  width:120px; height:120px; margin:0 auto 20px;
+}
+.coin {
+  width:120px; height:120px; border-radius:50%;
+  border:4px solid var(--ink);
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform 0.1s;
+  box-shadow:0 4px 0 var(--ink);
+}
+.coin.flipping {
+  animation: coinFlip 1.8s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+@keyframes coinFlip {
+  0%   { transform:rotateY(0deg)   rotateX(0deg);   }
+  20%  { transform:rotateY(720deg) rotateX(20deg);  }
+  50%  { transform:rotateY(1440deg) rotateX(-10deg);}
+  80%  { transform:rotateY(2000deg) rotateX(5deg);  }
+  100% { transform:rotateY(2160deg) rotateX(0deg);  }
+}
+.coin-face {
+  position:absolute; inset:0; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  backface-visibility:hidden;
+  font-size:3rem;
+}
+.coin-heads { background:linear-gradient(135deg,#f7c200,#e8400c); }
+.coin-tails { background:linear-gradient(135deg,#3b82f6,#a855f7); transform:rotateY(180deg); }
+
+/* Result banner */
+.toss-result-banner {
+  padding:24px 20px;
+  border:3px solid var(--ink);
+  border-radius:20px;
+  text-align:center;
+  box-shadow:var(--shadow-lg);
+  animation:resultPop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+  margin-bottom:24px;
+}
+@keyframes resultPop {
+  from{transform:scale(0.7);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+.result-winner-name {
+  font-family:'Clash Display','Cabinet Grotesk',sans-serif;
+  font-size:clamp(1.6rem,5vw,2.4rem); font-weight:700;
+  letter-spacing:-1px; margin:8px 0 4px;
+}
+.result-coin-text {
+  font-size:0.88rem; color:var(--ink2); font-weight:600; margin-bottom:18px;
+}
+
+/* Bat/Field election */
+.election-row {
+  display:flex; justify-content:center; gap:16px; margin-top:8px;
+}
+.elect-btn {
+  flex:1; max-width:150px;
+  padding:18px 12px;
+  border:2px solid var(--ink);
+  border-radius:16px;
+  background:var(--surface);
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:0.9rem; font-weight:700;
+  cursor:pointer; transition:all 0.15s;
+  box-shadow:var(--shadow);
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+}
+.elect-btn:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); }
+.elect-btn.selected {
+  transform:translateY(-3px); background:var(--ink); color:#fff;
+  box-shadow:0 5px 0 rgba(0,0,0,0.4);
+}
+.elect-btn-icon { font-size:2rem; }
+
+/* Final scorecard */
+.scorecard {
+  border:3px solid var(--ink);
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:var(--shadow-lg);
+  margin-bottom:24px;
+}
+.scorecard-header {
+  padding:16px 20px;
+  background:var(--ink);
+  color:#fff;
+  font-family:'Clash Display','Cabinet Grotesk',sans-serif;
+  font-size:1.1rem; font-weight:700;
+  display:flex; align-items:center; gap:10px;
+}
+.scorecard-body { background:var(--surface); }
+.scorecard-row {
+  display:flex; align-items:center; gap:14px;
+  padding:14px 20px;
+  border-bottom:1.5px solid var(--border);
+}
+.scorecard-row:last-child { border-bottom:none; }
+.scorecard-team-dot {
+  width:14px; height:14px; border-radius:50%;
+  border:2px solid var(--ink); flex-shrink:0;
+}
+.scorecard-team-name { font-weight:800; font-size:0.95rem; flex:1; }
+.scorecard-badge {
+  padding:4px 12px; border-radius:20px;
+  border:2px solid var(--ink);
+  font-size:0.78rem; font-weight:800;
+  font-family:'Clash Display','Cabinet Grotesk',sans-serif;
+}
+.badge-bat  { background:#f7c200; }
+.badge-field{ background:#22c55e; color:#fff; border-color:var(--ink); }
+.badge-lost { background:var(--bg); color:var(--muted); border-color:var(--border2); }
+
+</style>
+</head>
+<body>
+<div id="toast"></div>
+<div id="app"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// CONSTANTS & HELPERS
+// ═══════════════════════════════════════════════════════════════
+const TEAM_COLORS = [
+  "#e8400c","#f7c200","#22c55e","#3b82f6",
+  "#a855f7","#ec4899","#14b8a6","#f97316",
+  "#6366f1","#84cc16"
+];
+const TEAM_NAMES = [
+  "Phoenix","Falcon","Titan","Cobra",
+  "Storm","Blaze","Nova","Viper",
+  "Eagle","Rocket"
+];
+
+let state = {
+  step: 1,            // 1=setup, 2=assign, 3=summary, 4=toss
+  numTeams: null,
+  members: [],        // all added names (lowercase-normalised for dedup)
+  memberInput: "",
+  teams: [],          // [{id,name,color,members:[]}]
+  selectedChip: null, // name currently selected to assign
+  editingTeamName: null,
+  // Toss state
+  tossCallingTeam: null,   // team id that called
+  tossCoinSide: null,      // "heads"|"tails" — what they called
+  tossResult: null,        // "heads"|"tails" — actual flip result
+  tossWinner: null,        // team id of toss winner
+  tossElection: null,      // "bat"|"field"
+  tossPhase: "pick",       // "pick"|"call"|"flip"|"result"
+};
+
+function genId(){ return Math.random().toString(36).slice(2,8); }
+
+function normalize(name){ return name.trim().toLowerCase(); }
+
+function avatarColor(name){
+  const h = [...name].reduce((a,c)=>a+c.charCodeAt(0),0);
+  return TEAM_COLORS[h % TEAM_COLORS.length];
+}
+
+function initials(name){
+  return name.trim().split(/\s+/).map(w=>w[0]).join("").slice(0,2).toUpperCase();
+}
+
+function toast(msg, dur=2500){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), dur);
+}
+
+function setState(partial){
+  Object.assign(state, partial);
+  render();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════════════
+function render(){
+  document.getElementById("app").innerHTML = buildApp();
+  attachEvents();
+}
+
+function buildApp(){
+  const steps = [
+    {n:1, label:"Members"},
+    {n:2, label:"Assign"},
+    {n:3, label:"Summary"},
+    {n:4, label:"Toss 🏏"},
+  ];
+  const pillsHtml = steps.map(s=>`
+    <div class="step-pill ${state.step===s.n?"active":state.step>s.n?"done":""}">
+      ${state.step>s.n?"✓ ":""}${s.n}. ${s.label}
+    </div>`).join("");
+
+  let screenHtml = "";
+  if(state.step===1) screenHtml = buildStep1();
+  if(state.step===2) screenHtml = buildStep2();
+  if(state.step===3) screenHtml = buildStep3();
+  if(state.step===4) screenHtml = buildStep4();
+
+  return `
+    <header class="site-header">
+      <div class="logo">Team<span>Forge</span></div>
+      <div class="step-pills">${pillsHtml}</div>
+    </header>
+    <div class="screen">${screenHtml}</div>
+  `;
+}
+
+// ──────────────────────────────────────────────────────────────
+// STEP 1 — Members & Team Count
+// ──────────────────────────────────────────────────────────────
+function buildStep1(){
+  // Member chips
+  const chips = state.members.map(m=>`
+    <div class="member-chip" style="border-color:${avatarColor(m)}">
+      <div class="chip-avatar" style="background:${avatarColor(m)}">${initials(m)}</div>
+      <span>${m}</span>
+      <button class="chip-remove" data-action="remove-member" data-name="${m}" title="Remove">✕</button>
+    </div>`).join("");
+
+  // Team count buttons 2–10
+  const countBtns = [2,3,4,5,6,7,8,9,10].map(n=>`
+    <button class="count-btn ${state.numTeams===n?"active":""}" data-action="set-teams" data-n="${n}">${n}</button>
+  `).join("");
+
+  // Progress
+  const assigned = state.teams.reduce((s,t)=>s+t.members.length,0);
+  const total    = state.members.length;
+  const canProceed = state.numTeams && state.members.length >= state.numTeams;
+
+  // Validation msg
+  let validMsg = "";
+  if(state.numTeams && state.members.length > 0 && state.members.length < state.numTeams){
+    validMsg = `<div class="msg msg-info">⚠️ You have ${state.members.length} member${state.members.length>1?"s":""} but selected ${state.numTeams} teams. Add at least ${state.numTeams - state.members.length} more member${state.numTeams-state.members.length>1?"s":""}.</div>`;
+  }
+
+  return `
+    <div class="section-title">Build Your<br/>Dream Teams 🏆</div>
+    <div class="section-sub">Add members, choose how many teams — we'll sort the rest.</div>
+
+    <!-- Add Members -->
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div>
+          <div style="font-size:1.05rem;font-weight:800;font-family:'Clash Display',sans-serif">
+            👥 Team Members
+          </div>
+          <div style="font-size:0.8rem;color:var(--muted);margin-top:2px">
+            ${state.members.length} member${state.members.length!==1?"s":""} added
+          </div>
+        </div>
+        ${state.members.length>0?`<button class="btn btn-ghost btn-sm" data-action="clear-all">Clear all</button>`:""}
+      </div>
+
+      <div class="input-row">
+        <input class="inp" id="member-input" type="text" placeholder="Enter member name…"
+          value="${escHtml(state.memberInput)}" maxlength="40" autocomplete="off"/>
+        <button class="btn btn-primary" data-action="add-member">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add
+        </button>
+      </div>
+
+      <div class="members-pool" id="members-pool">${chips}</div>
+    </div>
+
+    <!-- Team Count -->
+    <div class="card">
+      <div style="font-size:1.05rem;font-weight:800;font-family:'Clash Display',sans-serif;margin-bottom:4px">
+        🎯 How many teams?
+      </div>
+      <div style="font-size:0.82rem;color:var(--muted);margin-bottom:2px">Tap a number to select</div>
+      <div class="count-grid">${countBtns}</div>
+      ${validMsg}
+    </div>
+
+    <!-- Proceed -->
+    <div style="display:flex;justify-content:flex-end;gap:10px;align-items:center">
+      ${state.members.length>0&&state.numTeams?`
+        <span style="font-size:0.82rem;color:var(--muted);font-weight:600">
+          ${state.members.length} member${state.members.length!==1?"s":""} → ${state.numTeams} team${state.numTeams!==1?"s":""}
+        </span>`:""}
+      <button class="btn btn-accent" data-action="go-assign" ${canProceed?"":"disabled"}>
+        Create Teams →
+      </button>
+    </div>
+  `;
+}
+
+// ──────────────────────────────────────────────────────────────
+// STEP 2 — Assign Members to Teams
+// ──────────────────────────────────────────────────────────────
+function buildStep2(){
+  const unassignedNames = state.members.filter(m=>
+    !state.teams.some(t=>t.members.includes(m))
+  );
+  const totalAssigned = state.members.length - unassignedNames.length;
+  const pct = state.members.length ? Math.round(totalAssigned/state.members.length*100) : 0;
+  const allAssigned = unassignedNames.length === 0;
+
+  // Unassigned chips
+  const unassignedChips = unassignedNames.map(m=>`
+    <div class="assignable-chip ${state.selectedChip===m?"selected":""}"
+      data-action="select-chip" data-name="${m}">
+      <div class="chip-avatar" style="background:${avatarColor(m)};width:18px;height:18px;font-size:0.6rem">${initials(m)}</div>
+      ${m}
+    </div>`).join("");
+
+  // Team cards
+  const teamCards = state.teams.map((t,i)=>{
+    const memberChips = t.members.map(m=>`
+      <div class="member-chip" style="border-color:${t.color};font-size:0.78rem;padding:4px 9px 4px 6px">
+        <div class="chip-avatar" style="background:${t.color};width:17px;height:17px;font-size:0.58rem">${initials(m)}</div>
+        <span>${m}</span>
+        <button class="chip-remove" data-action="unassign" data-member="${m}" data-team="${t.id}" title="Remove from team">✕</button>
+      </div>`).join("");
+
+    return `
+      <div class="team-card" style="animation-delay:${i*0.05}s">
+        <div class="team-header" style="background:${t.color}18">
+          <div class="team-color-dot" style="background:${t.color}"></div>
+          <div class="team-name">${escHtml(t.name)}</div>
+          <div class="team-count-badge">${t.members.length}</div>
+        </div>
+        <div class="team-body">
+          <div class="team-drop-zone ${t.members.length?"has-members":""}">
+            ${memberChips}
+          </div>
+          ${state.selectedChip ? `
+            <button class="btn btn-sm btn-yellow" style="margin-top:8px;width:100%"
+              data-action="assign-to" data-team="${t.id}">
+              + Add "${state.selectedChip}" here
+            </button>` : ""}
+        </div>
+      </div>`;
+  }).join("");
+
+  return `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+      <button class="btn btn-ghost btn-sm" data-action="back-to-step1">← Back</button>
+      <div class="section-title" style="font-size:clamp(1.4rem,4vw,2rem);margin-bottom:0">Assign Members 🎲</div>
+    </div>
+    <div class="section-sub">Tap a member → tap a team to add them. Or use Auto-assign!</div>
+
+    <!-- Progress -->
+    <div class="card" style="padding:16px 20px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:0.82rem;font-weight:700">Assignment progress</span>
+        <span style="font-size:0.82rem;font-weight:800;color:${allAssigned?"#166534":"var(--ink2)"}">
+          ${totalAssigned}/${state.members.length} assigned ${allAssigned?"✓":""}
+        </span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" style="width:${pct}%"></div>
+      </div>
+    </div>
+
+    <!-- Unassigned -->
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div>
+          <div style="font-size:1rem;font-weight:800;font-family:'Clash Display',sans-serif">
+            Unassigned Members
+          </div>
+          <div style="font-size:0.78rem;color:var(--muted);margin-top:1px">
+            ${unassignedNames.length>0
+              ? `Tap a member to select, then tap a team below`
+              : "Everyone has been assigned!"}
+          </div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-yellow btn-sm" data-action="auto-assign" ${unassignedNames.length===0?"disabled":""}>
+            ⚡ Auto-assign
+          </button>
+          <button class="btn btn-ghost btn-sm" data-action="reset-assign">Reset</button>
+        </div>
+      </div>
+      <div class="unassigned-pool">${unassignedChips}</div>
+
+      ${state.selectedChip ? `
+        <div class="msg msg-info" style="margin-top:10px">
+          👉 Now tap a team card below to add <strong>${state.selectedChip}</strong>
+        </div>` : ""}
+    </div>
+
+    <!-- Teams grid -->
+    <div class="teams-grid">${teamCards}</div>
+
+    <!-- Next -->
+    <div style="display:flex;justify-content:flex-end;margin-top:20px">
+      <button class="btn btn-accent" data-action="go-summary" ${allAssigned?"":"disabled"}>
+        View Summary →
+      </button>
+    </div>
+    ${!allAssigned?`<div style="text-align:right;margin-top:6px;font-size:0.78rem;color:var(--muted)">
+      Assign all ${unassignedNames.length} remaining member${unassignedNames.length!==1?"s":""} to proceed
+    </div>`:""}
+  `;
+}
+
+// ──────────────────────────────────────────────────────────────
+// STEP 3 — Summary
+// ──────────────────────────────────────────────────────────────
+function buildStep3(){
+  const rows = state.teams.map(t=>{
+    const chips = t.members.map(m=>`
+      <div class="member-chip" style="border-color:${t.color};font-size:0.78rem;padding:3px 9px 3px 6px">
+        <div class="chip-avatar" style="background:${t.color};width:16px;height:16px;font-size:0.55rem">${initials(m)}</div>
+        ${m}
+      </div>`).join("");
+    return `
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:12px;height:12px;border-radius:50%;background:${t.color};border:2px solid var(--ink)"></div>
+            <strong>${escHtml(t.name)}</strong>
+          </div>
+        </td>
+        <td style="text-align:center;font-weight:800;font-family:'Clash Display',sans-serif">${t.members.length}</td>
+        <td><div class="member-chips-inline">${chips}</div></td>
+      </tr>`;
+  }).join("");
+
+  const totalMembers = state.teams.reduce((s,t)=>s+t.members.length,0);
+
+  return `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+      <button class="btn btn-ghost btn-sm" data-action="back-to-step2">← Back</button>
+      <div class="section-title" style="font-size:clamp(1.4rem,4vw,2rem);margin-bottom:0">Teams Ready! 🎉</div>
+    </div>
+    <div class="section-sub">${state.teams.length} teams · ${totalMembers} members · Let the games begin!</div>
+
+    <!-- Team cards visual -->
+    <div class="teams-grid" style="margin-bottom:24px">
+      ${state.teams.map((t,i)=>`
+        <div class="team-card" style="animation-delay:${i*0.06}s">
+          <div class="team-header" style="background:${t.color}22">
+            <div class="team-color-dot" style="background:${t.color}"></div>
+            <div class="team-name">${escHtml(t.name)}</div>
+            <div class="team-count-badge" style="background:${t.color}22">${t.members.length}</div>
+          </div>
+          <div class="team-body" style="display:flex;flex-wrap:wrap;gap:5px">
+            ${t.members.map(m=>`
+              <div class="member-chip" style="border-color:${t.color};font-size:0.78rem;padding:4px 10px 4px 6px;box-shadow:2px 2px 0 ${t.color}">
+                <div class="chip-avatar" style="background:${t.color};width:18px;height:18px;font-size:0.6rem">${initials(m)}</div>
+                ${m}
+              </div>`).join("")}
+          </div>
+        </div>`).join("")}
+    </div>
+
+    <!-- Table -->
+    <div class="card" style="padding:0;overflow:hidden">
+      <table class="summary-table">
+        <thead>
+          <tr>
+            <th>Team</th>
+            <th style="text-align:center">Members</th>
+            <th>Roster</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+
+    <!-- Actions -->
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap">
+      <button class="btn btn-ghost" data-action="back-to-step2">✏️ Edit Teams</button>
+      <button class="btn btn-yellow" data-action="export-text">📋 Copy to Clipboard</button>
+      <button class="btn btn-primary" data-action="start-over">🔄 Start Over</button>
+      <button class="btn btn-accent" data-action="go-toss">🏏 Toss →</button>
+    </div>
+  `;
+}
+
+
+// ──────────────────────────────────────────────────────────────
+// STEP 4 — Cricket Toss
+// ──────────────────────────────────────────────────────────────
+function buildStep4(){
+  const { teams, tossPhase, tossCallingTeam, tossCoinSide, tossResult, tossWinner, tossElection } = state;
+
+  // ── Phase: pick calling team ──
+  if(tossPhase === "pick"){
+    const teamBtns = teams.map(t=>`
+      <button class="toss-team-btn ${tossCallingTeam===t.id?"selected":""}"
+        style="${tossCallingTeam===t.id?`background:${t.color};border-color:${t.color}`:""}"
+        data-action="toss-pick-team" data-team="${t.id}">
+        <div class="toss-team-icon" style="background:${t.color}">${t.name.slice(0,2).toUpperCase()}</div>
+        <div class="toss-team-label">${escHtml(t.name)}</div>
+        <div class="toss-team-members">${t.members.length} member${t.members.length!==1?"s":""}</div>
+      </button>`).join("");
+
+    return `
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+        <button class="btn btn-ghost btn-sm" data-action="back-to-step3">← Back</button>
+        <div class="toss-title" style="margin-bottom:0">The Toss 🏏</div>
+      </div>
+      <div class="card">
+        <div style="font-size:1rem;font-weight:800;font-family:'Clash Display',sans-serif;margin-bottom:4px">
+          Step 1 — Which team calls the toss?
+        </div>
+        <div style="font-size:0.82rem;color:var(--muted);margin-bottom:16px">
+          Select the team that gets to call heads or tails
+        </div>
+        <div class="toss-team-grid">${teamBtns}</div>
+        <div style="display:flex;justify-content:flex-end">
+          <button class="btn btn-accent" data-action="toss-go-call" ${tossCallingTeam?"":"disabled"}>
+            Call the Toss →
+          </button>
+        </div>
+      </div>`;
+  }
+
+  // ── Phase: call heads or tails ──
+  if(tossPhase === "call"){
+    const callingTeam = teams.find(t=>t.id===tossCallingTeam);
+    return `
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+        <button class="btn btn-ghost btn-sm" data-action="toss-back-pick">← Back</button>
+        <div class="toss-title" style="margin-bottom:0">Call It! 🪙</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:20px;
+          background:${callingTeam.color}18;border:2px solid ${callingTeam.color};margin-bottom:16px">
+          <div style="width:10px;height:10px;border-radius:50%;background:${callingTeam.color}"></div>
+          <span style="font-weight:700;font-size:0.85rem">${escHtml(callingTeam.name)} is calling</span>
+        </div>
+        <div style="font-size:1rem;font-weight:800;font-family:'Clash Display',sans-serif;margin-bottom:18px">
+          Heads or Tails?
+        </div>
+        <div class="coin-call-row">
+          <button class="coin-side-btn ${tossCoinSide==="heads"?"selected":""}" data-action="toss-call-side" data-side="heads">
+            <div class="coin-side-icon">🌕</div>
+            <div>Heads</div>
+          </button>
+          <button class="coin-side-btn ${tossCoinSide==="tails"?"selected":""}" data-action="toss-call-side" data-side="tails">
+            <div class="coin-side-icon">🌑</div>
+            <div>Tails</div>
+          </button>
+        </div>
+        <button class="btn btn-accent" style="margin-top:8px" data-action="toss-flip" ${tossCoinSide?"":"disabled"}>
+          🪙 Flip the Coin!
+        </button>
+      </div>`;
+  }
+
+  // ── Phase: flipping ──
+  if(tossPhase === "flip"){
+    return `
+      <div class="card" style="text-align:center;padding:40px 28px">
+        <div style="font-size:1rem;font-weight:800;font-family:'Clash Display',sans-serif;margin-bottom:24px">
+          Flipping…
+        </div>
+        <div class="coin-wrap">
+          <div class="coin flipping">
+            <div class="coin-face coin-heads">🌕</div>
+            <div class="coin-face coin-tails">🌑</div>
+          </div>
+        </div>
+        <div style="color:var(--muted);font-size:0.9rem;font-weight:600;margin-top:8px">
+          The coin is in the air…
+        </div>
+      </div>`;
+  }
+
+  // ── Phase: result / election ──
+  if(tossPhase === "result"){
+    const winner     = teams.find(t=>t.id===tossWinner);
+    const loser      = teams.find(t=>t.id!==tossWinner);
+    const callingTeam= teams.find(t=>t.id===tossCallingTeam);
+    const won        = tossCallingTeam === tossWinner;
+    const coinEmoji  = tossResult === "heads" ? "🌕" : "🌑";
+
+    // If multi-team (>2), loser is just "others"
+    const loserLabel = teams.length === 2 ? escHtml(loser?.name||"") : "other teams";
+
+    let electionHtml = "";
+    if(!tossElection){
+      electionHtml = `
+        <div style="font-size:0.92rem;font-weight:700;margin-bottom:12px">
+          ${escHtml(winner.name)}, choose your preference:
+        </div>
+        <div class="election-row">
+          <button class="elect-btn" data-action="toss-elect" data-choice="bat">
+            <div class="elect-btn-icon">🏏</div>
+            <div>Bat First</div>
+          </button>
+          <button class="elect-btn" data-action="toss-elect" data-choice="field">
+            <div class="elect-btn-icon">🧤</div>
+            <div>Field First</div>
+          </button>
+        </div>`;
+    } else {
+      electionHtml = `
+        <div style="font-size:0.95rem;font-weight:700;color:#166534">
+          ✅ Decision made!
+        </div>`;
+    }
+
+    return `
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+        <button class="btn btn-ghost btn-sm" data-action="toss-redo">🔄 Redo Toss</button>
+        <div class="toss-title" style="margin-bottom:0">Toss Result 🎉</div>
+      </div>
+
+      <div class="toss-result-banner" style="background:${winner.color}14;border-color:${winner.color}">
+        <div style="font-size:2rem">${coinEmoji}</div>
+        <div style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:${winner.color}">
+          It's ${tossResult}!
+        </div>
+        <div class="result-winner-name">${escHtml(winner.name)} wins the toss!</div>
+        <div class="result-coin-text">
+          ${escHtml(callingTeam.name)} called <strong>${tossCoinSide}</strong> —
+          ${won ? "correct call 🎯" : "wrong call, but " + escHtml(winner.name) + " got lucky!"}
+        </div>
+        ${electionHtml}
+      </div>
+
+      ${tossElection ? `
+      <div class="scorecard">
+        <div class="scorecard-header">📋 Match Setup</div>
+        <div class="scorecard-body">
+          ${teams.map(t=>{
+            const isWinner = t.id === tossWinner;
+            const choice   = isWinner ? tossElection : (tossElection==="bat"?"field":"bat");
+            return `
+            <div class="scorecard-row">
+              <div class="scorecard-team-dot" style="background:${t.color}"></div>
+              <div class="scorecard-team-name">${escHtml(t.name)}</div>
+              <div style="display:flex;gap:6px;align-items:center">
+                ${isWinner?`<span style="font-size:0.72rem;background:${t.color}22;border:1.5px solid ${t.color};padding:2px 8px;border-radius:10px;font-weight:700;color:${t.color}">🏆 Won toss</span>`:""}
+                <div class="scorecard-badge ${choice==="bat"?"badge-bat":"badge-field"}">
+                  ${choice==="bat"?"🏏 Batting":"🧤 Fielding"}
+                </div>
+              </div>
+            </div>`;
+          }).join("")}
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap">
+        <button class="btn btn-ghost" data-action="toss-redo">🔄 Redo Toss</button>
+        <button class="btn btn-yellow" data-action="export-toss">📋 Copy Result</button>
+        <button class="btn btn-accent" data-action="start-over">🏠 Start Over</button>
+      </div>` : ""}
+    `;
+  }
+
+  return `<div>Loading…</div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// EVENTS
+// ═══════════════════════════════════════════════════════════════
+function attachEvents(){
+  // Input enter key
+  const inp = document.getElementById("member-input");
+  if(inp){
+    inp.focus();
+    inp.addEventListener("keydown", e=>{
+      if(e.key==="Enter") handleAdd();
+    });
+    inp.addEventListener("input", e=>{
+      state.memberInput = e.target.value;
+    });
+  }
+
+  document.querySelectorAll("[data-action]").forEach(el=>{
+    el.addEventListener("click", e=>{
+      e.stopPropagation();
+      handleAction(e.currentTarget);
+    });
+  });
+}
+
+function handleAction(el){
+  const a = el.dataset.action;
+
+  if(a==="add-member"){
+    handleAdd();
+  }
+  else if(a==="remove-member"){
+    const name = el.dataset.name;
+    // Also unassign from teams
+    const teams = state.teams.map(t=>({...t, members:t.members.filter(m=>m!==name)}));
+    setState({ members:state.members.filter(m=>m!==name), teams, memberInput:"" });
+  }
+  else if(a==="clear-all"){
+    if(state.members.length===0) return;
+    setState({ members:[], teams:state.teams.map(t=>({...t,members:[]})), memberInput:"" });
+    toast("All members cleared");
+  }
+  else if(a==="set-teams"){
+    setState({ numTeams: parseInt(el.dataset.n) });
+  }
+  else if(a==="go-assign"){
+    if(!state.numTeams || state.members.length < state.numTeams) return;
+    // Build teams preserving existing ones if count unchanged
+    let teams = [];
+    for(let i=0; i<state.numTeams; i++){
+      teams.push(
+        state.teams[i]
+          ? {...state.teams[i]}
+          : { id:genId(), name:TEAM_NAMES[i]||`Team ${i+1}`, color:TEAM_COLORS[i%TEAM_COLORS.length], members:[] }
+      );
+    }
+    // Trim extra teams
+    teams = teams.slice(0, state.numTeams);
+    // Remove members from teams that are no longer in member list
+    teams = teams.map(t=>({...t, members:t.members.filter(m=>state.members.includes(m))}));
+    setState({ step:2, teams, selectedChip:null });
+  }
+  else if(a==="back-to-step1"){
+    setState({ step:1, selectedChip:null });
+  }
+  else if(a==="back-to-step2"){
+    setState({ step:2, selectedChip:null });
+  }
+  else if(a==="select-chip"){
+    const name = el.dataset.name;
+    setState({ selectedChip: state.selectedChip===name ? null : name });
+  }
+  else if(a==="assign-to"){
+    if(!state.selectedChip) return;
+    const teamId = el.dataset.team;
+    const teams = state.teams.map(t=>{
+      if(t.id===teamId){
+        if(!t.members.includes(state.selectedChip)){
+          return {...t, members:[...t.members, state.selectedChip]};
+        }
+      }
+      return t;
+    });
+    setState({ teams, selectedChip:null });
+  }
+  else if(a==="unassign"){
+    const member = el.dataset.member;
+    const teamId = el.dataset.team;
+    const teams = state.teams.map(t=>{
+      if(t.id===teamId) return {...t, members:t.members.filter(m=>m!==member)};
+      return t;
+    });
+    setState({ teams });
+  }
+  else if(a==="auto-assign"){
+    autoAssign();
+  }
+  else if(a==="reset-assign"){
+    const teams = state.teams.map(t=>({...t, members:[]}));
+    setState({ teams, selectedChip:null });
+    toast("Assignments reset");
+  }
+  else if(a==="go-summary"){
+    const unassigned = state.members.filter(m=>!state.teams.some(t=>t.members.includes(m)));
+    if(unassigned.length>0) return;
+    setState({ step:3 });
+  }
+  else if(a==="export-text"){
+    exportText();
+  }
+  else if(a==="start-over"){
+    setState({ step:1, numTeams:null, members:[], memberInput:"", teams:[], selectedChip:null,
+               tossCallingTeam:null, tossCoinSide:null, tossResult:null,
+               tossWinner:null, tossElection:null, tossPhase:"pick" });
+  }
+  // ── Toss actions ──
+  else if(a==="go-toss"){
+    setState({ step:4, tossPhase:"pick", tossCallingTeam:null, tossCoinSide:null,
+               tossResult:null, tossWinner:null, tossElection:null });
+  }
+  else if(a==="back-to-step3"){
+    setState({ step:3 });
+  }
+  else if(a==="toss-pick-team"){
+    setState({ tossCallingTeam: el.dataset.team });
+  }
+  else if(a==="toss-go-call"){
+    if(!state.tossCallingTeam) return;
+    setState({ tossPhase:"call" });
+  }
+  else if(a==="toss-back-pick"){
+    setState({ tossPhase:"pick", tossCoinSide:null });
+  }
+  else if(a==="toss-call-side"){
+    setState({ tossCoinSide: el.dataset.side });
+  }
+  else if(a==="toss-flip"){
+    if(!state.tossCoinSide) return;
+    setState({ tossPhase:"flip" });
+    // Animate then reveal after 2s
+    setTimeout(()=>{
+      const result = Math.random() < 0.5 ? "heads" : "tails";
+      const callerWon = result === state.tossCoinSide;
+      // If caller won, they win; otherwise pick a random other team
+      let winnerTeam;
+      if(callerWon){
+        winnerTeam = state.tossCallingTeam;
+      } else {
+        const others = state.teams.filter(t=>t.id!==state.tossCallingTeam);
+        winnerTeam = others[Math.floor(Math.random()*others.length)].id;
+      }
+      setState({ tossPhase:"result", tossResult:result, tossWinner:winnerTeam });
+    }, 2000);
+  }
+  else if(a==="toss-elect"){
+    const choice = el.dataset.choice;
+    setState({ tossElection: choice });
+    toast(choice==="bat" ? "🏏 Batting first!" : "🧤 Fielding first!");
+  }
+  else if(a==="toss-redo"){
+    setState({ tossPhase:"pick", tossCallingTeam:null, tossCoinSide:null,
+               tossResult:null, tossWinner:null, tossElection:null });
+  }
+  else if(a==="export-toss"){
+    const winner = state.teams.find(t=>t.id===state.tossWinner);
+    const lines = [
+      "🏏 TOSS RESULT",
+      "═══════════════════",
+      `Coin: ${state.tossResult?.toUpperCase()} (${state.tossCoinSide?.toUpperCase()} was called)`,
+      `Toss Winner: ${winner?.name}`,
+      `Decision: ${winner?.name} chose to ${state.tossElection} first`,
+      "",
+      "MATCH LINEUP:",
+      ...state.teams.map(t=>{
+        const choice = t.id===state.tossWinner ? state.tossElection : (state.tossElection==="bat"?"field":"bat");
+        return `  ${t.name}: ${choice==="bat"?"🏏 Batting":"🧤 Fielding"}`;
+      }),
+    ];
+    const text = lines.join("\n");
+    if(navigator.clipboard){
+      navigator.clipboard.writeText(text).then(()=>toast("📋 Result copied!"));
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// LOGIC
+// ═══════════════════════════════════════════════════════════════
+function handleAdd(){
+  const inp = document.getElementById("member-input");
+  const raw = (inp ? inp.value : state.memberInput).trim();
+  if(!raw) return;
+
+  const key = normalize(raw);
+  // Check duplicate (case-insensitive)
+  if(state.members.some(m=>normalize(m)===key)){
+    toast(`"${raw}" is already in the list!`);
+    inp.classList.add("error");
+    setTimeout(()=>inp&&inp.classList.remove("error"), 1200);
+    return;
+  }
+
+  setState({ members:[...state.members, raw], memberInput:"" });
+}
+
+function autoAssign(){
+  // Collect unassigned members
+  const assigned = new Set(state.teams.flatMap(t=>t.members));
+  const unassigned = state.members.filter(m=>!assigned.has(m));
+  if(!unassigned.length) return;
+
+  // Shuffle unassigned
+  const shuffled = [...unassigned].sort(()=>Math.random()-0.5);
+
+  // Distribute round-robin to the team with fewest members first
+  const teams = state.teams.map(t=>({...t, members:[...t.members]}));
+  shuffled.forEach(member=>{
+    // Find team with fewest members
+    let minTeam = teams[0];
+    teams.forEach(t=>{ if(t.members.length < minTeam.members.length) minTeam = t; });
+    minTeam.members.push(member);
+  });
+
+  setState({ teams, selectedChip:null });
+  toast(`⚡ Auto-assigned ${shuffled.length} member${shuffled.length!==1?"s":""}`);
+}
+
+function exportText(){
+  const lines = ["🏆 TEAM ROSTER\n"];
+  state.teams.forEach(t=>{
+    lines.push(`${t.name} (${t.members.length} members)`);
+    t.members.forEach((m,i)=>lines.push(`  ${i+1}. ${m}`));
+    lines.push("");
+  });
+  const text = lines.join("\n");
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(()=>toast("📋 Copied to clipboard!"));
+  } else {
+    // Fallback
+    const ta = document.createElement("textarea");
+    ta.value = text; document.body.appendChild(ta);
+    ta.select(); document.execCommand("copy");
+    document.body.removeChild(ta);
+    toast("📋 Copied to clipboard!");
+  }
+}
+
+function escHtml(s){
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+render();
+</script>
+</body>
+</html>
